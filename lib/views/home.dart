@@ -4,7 +4,7 @@ import 'package:flutter_application_1/views/add_task.dart';
 import 'package:flutter_application_1/views/form.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key});
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,19 +17,15 @@ class HomeScreen extends StatelessWidget {
           TaskListTile(
             task: Task(name: 'Tarea 1'),
             onCheckboxChanged: (isChecked) {
-              // Manejar el cambio de estado de la tarea aquí
             },
             onDeletePressed: () {
-              // Manejar la eliminación de la tarea aquí
             },
           ),
           TaskListTile(
             task: Task(name: 'Tarea 2'),
             onCheckboxChanged: (isChecked) {
-              // Manejar el cambio de estado de la tarea aquí
             },
             onDeletePressed: () {
-              // Manejar la eliminación de la tarea aquí
             },
           ),
         ],
@@ -41,7 +37,7 @@ class HomeScreen extends StatelessWidget {
             MaterialPageRoute(builder: (context) => AddTaskScreen()),
           );
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
