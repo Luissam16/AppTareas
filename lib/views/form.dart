@@ -6,7 +6,7 @@ class TaskListTile extends StatelessWidget {
   final void Function(bool?)? onCheckboxChanged;
   final VoidCallback? onDeletePressed;
 
-  const TaskListTile({super.key, 
+  const TaskListTile({
     required this.task,
     this.onCheckboxChanged,
     this.onDeletePressed,
