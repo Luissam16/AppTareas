@@ -6,7 +6,7 @@ class TaskListTile extends StatelessWidget {
   final void Function(bool?)? onCheckboxChanged;
   final VoidCallback? onDeletePressed;
 
-  const TaskListTile({
+  const TaskListTile({super.key, 
     required this.task,
     this.onCheckboxChanged,
     this.onDeletePressed,
@@ -19,6 +19,12 @@ class TaskListTile extends StatelessWidget {
         task.name,
         style: TextStyle(
           decoration: task.isCompleted ? TextDecoration.lineThrough : null,
+        ),
+      ),
+      subtitle: Text(
+        task.description, 
+        style: const TextStyle(
+          color: Colors.grey,
         ),
       ),
       leading: Checkbox(

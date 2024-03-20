@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/task.dart';
 
 class AddTaskScreen extends StatefulWidget {
-  const AddTaskScreen({super.key});
+  const AddTaskScreen({Key? key}) : super(key: key);
 
   @override
   _AddTaskScreenState createState() => _AddTaskScreenState();
@@ -10,18 +10,35 @@ class AddTaskScreen extends StatefulWidget {
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
   late TextEditingController _taskController;
-  List<Task> tasks = [];
+  late TextEditingController _descriptionController;
+  DateTime? _selectedDate;
 
   @override
   void initState() {
     super.initState();
     _taskController = TextEditingController();
+    _descriptionController = TextEditingController();
   }
 
   @override
   void dispose() {
     _taskController.dispose();
+    _descriptionController.dispose();
     super.dispose();
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
   }
 
   @override
@@ -42,15 +59,41 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
               ),
             ),
             const SizedBox(height: 16.0),
+            TextField(
+              controller: _descriptionController,
+              decoration: const InputDecoration(
+                hintText: 'Ingrese la descripción de la tarea',
+              ),
+            ),
+            const SizedBox(height: 16.0),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    _selectedDate == null
+                        ? 'Seleccione la fecha de entrega'
+                        : 'Fecha de entrega: ${_selectedDate!.toString().substring(0, 10)}',
+                  ),
+                ),
+                TextButton(
+                  onPressed: () => _selectDate(context),
+                  child: const Text('Seleccionar fecha'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () {
                 String taskName = _taskController.text.trim();
-                if (taskName.isNotEmpty) {
-                  Task newTask = Task(name: taskName);
-                  setState(() {
-                    tasks.add(newTask); 
-                  });
-                  Navigator.of(context).pop(); 
+                String description = _descriptionController.text.trim();
+                if (taskName.isNotEmpty && description.isNotEmpty) {
+                  Task newTask = Task(
+                    name: taskName,
+                    description: description,
+                    dueDate: _selectedDate,
+                    isCompleted: false,
+                  );
+                  Navigator.of(context).pop(newTask);
                 }
               },
               child: const Text('Agregar'),
