@@ -2,29 +2,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TaskController {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  FirebaseFirestore db = FirebaseFirestore.instance;
-
-  final String collection = 'tasks';
-
- 
-
-  Future<String> create(Map<String, dynamic> task) async {
-
+  Future<String> create(Map<String, dynamic> taskData) async {
     try {
-
-      DocumentReference response = await db.collection('tasks').add(task);
-
-      return response.id;
-
+      DocumentReference docRef = await _firestore.collection('tasks').add(taskData);
+      return docRef.id; 
     } catch (e) {
-
-      print(e);
-
-      return "";
-
+      print('Error al agregar la tarea a Firestore: $e');
+      return '';
     }
-
   }
-
 }

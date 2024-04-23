@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/Controller/TaskController.dart';
 import 'package:flutter_application_1/models/task.dart';
 
 class AddTaskScreen extends StatefulWidget {
@@ -83,7 +84,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             ),
             const SizedBox(height: 16.0),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 String taskName = _taskController.text.trim();
                 String description = _descriptionController.text.trim();
                 if (taskName.isNotEmpty && description.isNotEmpty) {
@@ -93,7 +94,16 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     dueDate: _selectedDate,
                     isCompleted: false,
                   );
-                  Navigator.of(context).pop(newTask);
+                  print('Adding task: $newTask');
+                  
+                  // método create de TaskController para agregar la tarea a Firestore
+                  String taskId = await TaskController().create(newTask.toMap());
+                  if (taskId.isNotEmpty) {
+                    print('Task added successfully with ID: $taskId');
+                    Navigator.of(context).pop(newTask);
+                  } else {
+                    print('Failed to add task to Firestore');
+                  }
                 }
               },
               child: const Text('Agregar'),
